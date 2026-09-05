@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy One Year, Arwa ♡</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            blush: { 50: '#fdf8f8', 100: '#fbeeed', 200: '#f7d8d6', 300: '#f1bbba', 400: '#e89493', 500: '#db6c6c' },
+            dusty: { 50: '#f8f5f6', 100: '#eedee2', 200: '#ddbec6', 300: '#c59ba7', 400: '#a87584', 500: '#8c5969' },
+            ivory: '#FAF7F2',
+            cream: '#F4EFE6',
+            subtleBurgundy: '#4A1D24',
+            botanicalGreen: '#5A6B5C',
+            mutedGreen: '#8F9E8B'
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Amiri', 'serif'],
+            sans: ['Plus Jakarta Sans', 'Cairo', 'sans-serif'],
+            arabicText: ['Cairo', 'sans-serif']
+          },
+          boxShadow: {
+            'luxury': '0 20px 40px -15px rgba(74, 29, 36, 0.07)',
+            'soft-glow': '0 0 25px rgba(222, 190, 198, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React 18, ReactDOM, Framer Motion & Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/framer-motion@11.2.10/dist/framer-motion.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #FAF7F2; color: #4A1D24; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #FAF7F2; }
+    ::-webkit-scrollbar-thumb { background: #ddbec6; border-radius: 9999px; }
+  </style>
+</head>
+<body class="selection:bg-dusty-200 selection:text-subtleBurgundy">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const { motion, AnimatePresence } = window.Motion;
+
+    // الإعدادات المركزية والبيانات
+    const siteConfig = {
+      girlfriendName: "أروى",
+      girlfriendNameEn: "Arwa",
+      anniversaryStartDate: "2025-09-05T00:00:00",
+      song: "assets/music/love-song.mp3",
+      hero: {
+        title: "Happy One Year, Arwa ♡",
+        subtitle: "One year. So many memories. And so much love.",
+        arabicHeadline: "سنة كاملة، وكل ثانية فيها كانت حياة تانية بوجودك."
+      },
+      loveLetter: `أروى، حبيبتي، صاحبتي، وكل دنيتي...
+
+تقريبًا كل حاجة حلوة في دنيتي بتتلخص فيكِ إنتِ يا أروى.
+
+إنتِ مش مجرد حد بحبه، إنتِ بقيتي جزء من كل حاجة حلوة في حياتي.
+
+أنا بحبك... وهفضل طول عمري أحبك. ❤️
+
+كل حاجة عملناها سوا، وكل لحظة عشناها مع بعض، وكل التفاصيل الصغيرة اللي جمعتنا... لما بفتكرها، بحس قد إيه عندي ذكريات حلوة نفسي أفضل محتفظ بيها طول عمري.
+
+يمكن الوقت يعدّي، والأيام تتغير، ونعيش حاجات كتير جديدة، لكن في حاجات معينة مستحيل أنساها... وكل حاجة عشناها سوا واحدة منها.
+
+أنا بحبك أوي يا أروى، ومش قادر أتخيل دنيتي من غيرك.
+
+ومش هسيب إيدك... لحد اليوم اللي نبقى فيه لبعض رسمي، ونتجوز، ونبدأ حياتنا سوا، ونفضل جنب بعض طول العمر. ❤️
+
+سنة عدّت... وإن شاء الله العمر كله لسه جاي.
+
+بحبك يا أروى. ❤️`,
+      finalMessage: "كل سنة وإنتِ معايا وفي قلبي يا أروى ♡",
+      finalSurprise: "وعد مني هفضل أحبك كل يوم أكتر من اللي قبله ❤️"
+    };
+
+    // الـ 20 صورة، كل صورة ليها ملفها الخاص photo-01 لغاية photo-20
+    const TOTAL_PHOTOS = 20;
+    const memoriesData = Array.from({ length: TOTAL_PHOTOS }, (_, i) => {
+      const idNum = String(i + 1).padStart(2, '0');
+      return {
+        id: `photo-${String(i + 1).padStart(2, '0')}`,
+        image: `assets/photos/photo-${idNum}.jpg`,
+        caption: i === 7 ? "لعبة الدومينو وكل ضحكة ولحظة عشناها سوا فيها حكاية ♡" : `لحظة خاصة وذكرى جميلة من أيامنا سوا ♡`,
+        type: i === 7 ? "domino" : (i % 3 === 0 ? "polaroid" : (i % 3 === 1 ? "tilted" : "editorial")),
+        isDomino: i === 7
+      };
+    });
+
+    const reasonsList = [
+      { id: 1, title: "متفهمة", excerpt: "بتسمعي بقلبك وبتفهمي اللي ورا السكوت." },
+      { id: 2, title: "حماسية", excerpt: "طاقتك وبهجتك اللي بتنوّر أي مكان تدخلي فيه." },
+      { id: 3, title: "حلوة", excerpt: "حلوة في كل حالاتك، حلاوة ملامح وروح ما تتكررش." },
+      { id: 4, title: "هادية", excerpt: "هدوء مريح بيخلّيني أطمن وسط زحمة الدنيا كلها." },
+      { id: 5, title: "طيبة", excerpt: "قلب أبيض ميعرفش غير النية الصافية والخير للكل." },
+      { id: 6, title: "حنينة", excerpt: "حنية فيها رحمة وخوف حقيقي على اللي بتحبيه." },
+      { id: 7, title: "رحيمة", excerpt: "إحساس عالي بقلوب الناس والاهتمام الصادق." },
+      { id: 8, title: "من غير شروط", excerpt: "حب حقيقي مش مستني مقابل، حب لمجرد إنك بتحبي." }
+    ];
+
+    const littleThingsList = [
+      { id: "lt-01", text: "ضحكتك العفوية اللي بتغير يومي في ثانية." },
+      { id: "lt-02", text: "طريقتك وانتي بتطمني عليا بحنية واهتمام." },
+      { id: "lt-03", text: "كلامنا وسهرنا اللي مبيخلصش والوقت بيجري معاه." },
+      { id: "lt-04", text: "خوفك عليا واهتمامك بأصغر تفاصيلي." },
+      { id: "lt-05", text: "أول رسالة وأول لحظة حسيت فيها إنك هتبقي كل دنيتي." }
+    ];
+
+    // رسومات الزهور
+    const RoseSVG = ({ className = "w-8 h-8 text-dusty-400" }) => (
+      <svg viewBox="0 0 100 100" fill="none" className={className}>
+        <path d="M50 20C40 20 32 28 32 38C32 46 38 52 46 55C38 58 30 65 30 75C30 85 40 90 50 90C60 90 70 85 70 75C70 65 62 58 54 55C62 52 68 46 68 38C68 28 60 20 50 20Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M50 52C50 65 44 72 44 80" stroke="#5A6B5C" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    );
+
+    const BranchSVG = ({ className = "w-32 h-8 text-mutedGreen" }) => (
+      <svg viewBox="0 0 200 60" fill="none" className={className}>
+        <path d="M10 30Q100 15 190 30" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M40 27Q45 15 55 20Q50 30 40 27Z" fill="currentColor" fillOpacity="0.35"/>
+        <path d="M80 24Q85 10 95 16Q90 27 80 24Z" fill="currentColor" fillOpacity="0.35"/>
+        <path d="M120 23Q125 10 135 15Q130 26 120 23Z" fill="currentColor" fillOpacity="0.35"/>
+        <path d="M160 25Q165 14 175 18Q170 29 160 25Z" fill="currentColor" fillOpacity="0.35"/>
+      </svg>
+    );
+
+    // معالج عرض الصور
+    function ImageCard({ src, caption, className = "" }) {
+      const [error, setError] = useState(false);
+      return (
+        <div className={`relative overflow-hidden bg-cream/80 flex items-center justify-center ${className}`}>
+          {!error ? (
+            <img src={src} onError={() => setError(true)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+          ) : (
+            <div className="flex flex-col items-center justify-center p-6 text-center text-dusty-400 w-full h-full border border-dashed border-dusty-200">
+              <RoseSVG className="w-8 h-8 mb-2 opacity-50" />
+              <span className="font-serif italic text-sm text-subtleBurgundy/70">{caption}</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // بتلات طافية
+    function Petals() {
+      return (
+        <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-3.5 h-5 rounded-full bg-gradient-to-tr from-blush-300/40 to-dusty-200/50 blur-[0.5px]"
+              style={{ left: `${(i * 18) + 5}%`, top: `-20px` }}
+              animate={{ y: ['0vh', '110vh'], x: [0, (i % 2 === 0 ? 25 : -25), 0], rotate: [0, 360], opacity: [0, 0.7, 0] }}
+              transition={{ duration: 15 + (i * 2), repeat: Infinity, delay: i * 2, ease: "easeInOut" }}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    // التطبيق بالكامل
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+      const [isPlaying, setIsPlaying] = useState(false);
+      const [selectedReason, setSelectedReason] = useState(null);
+      const [letterOpen, setLetterOpen] = useState(false);
+      const [openNotes, setOpenNotes] = useState({});
+      const [surpriseOpen, setSurpriseOpen] = useState(false);
+      const audioRef = useRef(null);
+
+      useEffect(() => {
+        const audio = new Audio(siteConfig.song);
+        audio.loop = true;
+        audioRef.current = audio;
+        return () => { audio.pause(); audio.src = ""; };
+      }, []);
+
+      const startAll = () => {
+        setIsOpen(true);
+        if (audioRef.current) {
+          audioRef.current.volume = 0.8;
+          audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+        }
+      };
+
+      const toggleMusic = () => {
+        if (!audioRef.current) return;
+        if (isPlaying) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        } else {
+          audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+        }
+      };
+
+      const finalMemory = memoriesData[TOTAL_PHOTOS - 1];
+      const timelineMemories = memoriesData.slice(0, TOTAL_PHOTOS - 1);
+
+      return (
+        <div className="min-h-screen bg-ivory text-subtleBurgundy relative">
+          <Petals />
+
+          {/* شاشة البداية */}
+          <AnimatePresence>
+            {!isOpen && (
+              <motion.div
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.9 }}
+                className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-ivory px-6 text-center"
+              >
+                <span className="font-serif italic text-2xl text-dusty-400 mb-2">To {siteConfig.girlfriendNameEn}, ♡</span>
+                <BranchSVG className="w-28 text-mutedGreen/60 mb-6" />
+                <h1 className="font-serif text-3xl md:text-4xl text-subtleBurgundy leading-relaxed font-light mb-4">
+                  One year ago,<br />
+                  <span className="italic font-normal text-dusty-500">it all started with a conversation.</span>
+                </h1>
+                <p className="font-arabicText text-sm text-subtleBurgundy/70 mb-10 max-w-xs leading-relaxed">
+                  رحلة سنة كاملة من الذكريات والحب...
+                </p>
+                <button
+                  onClick={startAll}
+                  className="px-8 py-3.5 text-xs tracking-widest uppercase font-serif text-subtleBurgundy border border-dusty-300 rounded-full bg-cream/70 backdrop-blur-sm shadow-sm transition-all duration-300 hover:bg-blush-100 hover:scale-105"
+                >
+                  Tap to Open ♡
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* زر التحكم بالصوت */}
+          {isOpen && (
+            <div className="fixed bottom-6 right-6 z-40">
+              <button
+                onClick={toggleMusic}
+                className="flex items-center justify-center w-11 h-11 rounded-full bg-cream/80 backdrop-blur-md border border-dusty-200 shadow-luxury text-subtleBurgundy hover:scale-105 transition-all"
+              >
+                <span className="font-serif text-lg">{isPlaying ? "♫" : "✕"}</span>
+              </button>
+            </div>
+          )}
+
+          {/* محتوى الموقع */}
+          {isOpen && (
+            <main className="relative z-10 max-w-4xl mx-auto px-6 py-16">
+              {/* Hero */}
+              <section className="text-center py-16">
+                <span className="font-serif italic text-dusty-400 text-sm tracking-widest uppercase mb-2 block">365 Days of Loving You</span>
+                <h1 className="font-serif text-4xl sm:text-5xl text-subtleBurgundy font-normal mb-4">{siteConfig.hero.title}</h1>
+                <p className="font-serif italic text-lg text-subtleBurgundy/80 max-w-md mx-auto mb-4">{siteConfig.hero.subtitle}</p>
+                <p className="font-arabicText text-sm sm:text-base text-subtleBurgundy/75 max-w-md mx-auto mb-8 leading-loose">{siteConfig.hero.arabicHeadline}</p>
+                <BranchSVG className="w-36 text-mutedGreen/50 mx-auto" />
+              </section>
+
+              {/* ذكريات الصور */}
+              <section className="space-y-16 py-12">
+                <div className="text-center mb-12">
+                  <span className="font-serif italic text-dusty-400 text-sm tracking-widest uppercase">Chapters of Us</span>
+                  <h2 className="font-serif text-3xl text-subtleBurgundy font-normal mt-2">Moments I never want to forget.</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {timelineMemories.map((mem, idx) => (
+                    <div key={mem.id} className={`p-4 bg-white/70 backdrop-blur-sm rounded-2xl border border-dusty-100 shadow-luxury ${mem.isDomino ? 'md:col-span-2 max-w-lg mx-auto' : ''}`}>
+                      <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3">
+                        <ImageCard src={mem.image} caption={mem.caption} className="w-full h-full" />
+                      </div>
+                      <p className="font-arabicText text-xs sm:text-sm text-subtleBurgundy/80 text-center leading-relaxed">{mem.caption}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* ليه بحبك يا أروى */}
+              <section className="py-20 text-center">
+                <span className="font-serif italic text-dusty-400 text-sm tracking-widest uppercase">From The Heart</span>
+                <h2 className="font-serif text-3xl text-subtleBurgundy font-normal mt-2 mb-8">ليه بحبك يا أروى؟</h2>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+                  {reasonsList.map(r => (
+                    <button
+                      key={r.id}
+                      onClick={() => setSelectedReason(selectedReason?.id === r.id ? null : r)}
+                      className={`p-4 rounded-xl border text-center transition-all ${selectedReason?.id === r.id ? 'bg-blush-100 border-dusty-300' : 'bg-cream/50 border-dusty-200'}`}
+                    >
+                      <RoseSVG className="w-6 h-6 mx-auto mb-1 text-dusty-400 opacity-60" />
+                      <span className="font-arabicText font-semibold text-subtleBurgundy text-sm">{r.title}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {selectedReason && (
+                  <div className="p-4 mb-8 bg-cream/80 rounded-xl border border-dusty-200 max-w-sm mx-auto">
+                    <p className="font-arabicText text-sm text-subtleBurgundy/90">{selectedReason.excerpt}</p>
+                  </div>
+                )}
+
+                <div className="bg-cream/40 p-6 sm:p-8 rounded-2xl border border-dusty-200/60 text-right leading-loose font-arabicText text-sm sm:text-base text-subtleBurgundy/85 space-y-3">
+                  <p>عشان إنتِ شخصية متفهمة، حماسية، وقبل أي حاجة... حلوة. ❤️</p>
+                  <p>عمري ما شفت حد عنده الهدوء، والحلاوة، والاحترام، والطيبة، والحنية اللي عندك.</p>
+                  <p>بس أكتر حاجة يمكن مفيش كلام يقدر يوصفها فيكِ هي حنانك... عمري ما شفت حنية شبه حنيتك؛ حنية فيها رحمة، فيها إحساس، فيها خوف على اللي بتحبيه. حنية حد بيحبك ويحن عليكِ من غير شروط، مش مستنية مقابل، لمجرد إنك بتحبي.</p>
+                  <p className="font-serif italic text-dusty-500 pt-2 text-center text-lg">"بس مهما قلت... مش هعرف أوصفك."</p>
+                  <p className="text-center font-bold text-subtleBurgundy text-base">إنتِ كل حاجة حلوة في الدنيا دي يا أروى. ❤️</p>
+                </div>
+              </section>
+
+              {/* التفاصيل الصغيرة */}
+              <section className="py-16 max-w-xl mx-auto">
+                <div className="text-center mb-8">
+                  <span className="font-serif italic text-dusty-400 text-sm tracking-widest uppercase">Cherished Details</span>
+                  <h2 className="font-serif text-2xl sm:text-3xl text-subtleBurgundy font-normal mt-1">التفاصيل الصغيرة اللي مش عايز أنساها</h2>
+                </div>
+                <div className="space-y-3">
+                  {littleThingsList.map((item, i) => (
+                    <div
+                      key={item.id}
+                      onClick={() => setOpenNotes(prev => ({ ...prev, [item.id]: !prev[item.id] }))}
+                      className="cursor-pointer bg-cream/40 border border-dusty-200/70 rounded-xl p-4 transition-all"
+                    >
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-serif text-subtleBurgundy">Note 0{i + 1} ♡</span>
+                        <span className="text-xs text-dusty-400 font-sans">{openNotes[item.id] ? "إخفاء" : "اضغطي هنا"}</span>
+                      </div>
+                      {openNotes[item.id] && (
+                        <p className="font-arabicText text-sm text-subtleBurgundy/90 mt-3 pt-3 border-t border-dusty-200/50 text-right">
+                          {item.text}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* خطاب الحب */}
+              <section className="py-20 text-center">
+                <span className="font-serif italic text-dusty-400 text-sm tracking-widest uppercase">Personal Letter</span>
+                <h2 className="font-serif text-3xl text-subtleBurgundy font-normal mt-2 mb-8">There's something I want you to read...</h2>
+
+                {!letterOpen ? (
+                  <button
+                    onClick={() => setLetterOpen(true)}
+                    className="p-8 bg-white border border-dusty-300 rounded-2xl shadow-luxury hover:scale-105 transition-all text-center max-w-xs mx-auto block"
+                  >
+                    <RoseSVG className="w-10 h-10 mx-auto mb-3 text-dusty-400" />
+                    <span className="font-serif text-lg text-subtleBurgundy block">Open it ♡</span>
+                    <span className="text-[11px] text-dusty-400 uppercase tracking-widest">Tap to open letter</span>
+                  </button>
+                ) : (
+                  <div className="bg-white/80 border border-dusty-200 rounded-2xl p-6 sm:p-10 shadow-luxury text-right font-arabicText text-sm sm:text-base text-subtleBurgundy leading-loose whitespace-pre-line">
+                    {siteConfig.loveLetter}
+                  </div>
+                )}
+              </section>
+
+              {/* النهاية */}
+              <section className="py-20 text-center">
+                <div className="space-y-4 mb-12 font-serif text-xl sm:text-2xl text-subtleBurgundy/90 italic">
+                  <p>"One year."</p>
+                  <p>"365 days."</p>
+                  <p>"So many memories."</p>
+                  <p className="text-2xl sm:text-3xl text-dusty-500 font-normal">"And somehow... I'd still choose you."</p>
+                </div>
+
+                <div className="max-w-md mx-auto p-3 bg-white rounded-2xl shadow-luxury border border-dusty-200 mb-8">
+                  <div className="aspect-[4/5] rounded-xl overflow-hidden">
+                    <ImageCard src={finalMemory.image} caption={finalMemory.caption} className="w-full h-full" />
+                  </div>
+                  <div className="mt-4">
+                    <span className="font-serif italic text-2xl text-subtleBurgundy block">Us.</span>
+                    <span className="text-xs uppercase tracking-widest text-dusty-400 font-sans">Always.</span>
+                  </div>
+                </div>
+
+                <div className="bg-cream/50 rounded-2xl p-6 max-w-md mx-auto border border-dusty-200 mb-8">
+                  <h3 className="font-serif text-xl text-subtleBurgundy mb-2">Happy One Year, Arwa. ♡</h3>
+                  <p className="font-arabicText text-sm text-subtleBurgundy/80">{siteConfig.finalMessage}</p>
+                </div>
+
+                {!surpriseOpen ? (
+                  <button
+                    onClick={() => setSurpriseOpen(true)}
+                    className="px-6 py-2.5 rounded-full border border-dusty-300 text-xs uppercase tracking-widest font-serif text-subtleBurgundy hover:bg-blush-100 transition-colors"
+                  >
+                    One more thing... ♡
+                  </button>
+                ) : (
+                  <div className="p-6 bg-blush-50 rounded-2xl border border-blush-200 text-center max-w-md mx-auto">
+                    <p className="font-arabicText text-sm text-subtleBurgundy font-semibold">{siteConfig.finalSurprise}</p>
+                  </div>
+                )}
+              </section>
+
+              <footer className="py-8 text-center border-t border-dusty-200/40 text-xs font-serif text-dusty-400">
+                Forever & Always, for Arwa ♡
+              </footer>
+            </main>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
